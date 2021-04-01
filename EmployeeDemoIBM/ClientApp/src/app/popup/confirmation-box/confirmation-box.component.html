@@ -1,0 +1,9 @@
+<mat-dialog-content>
+  <p>
+    Are you sure you want to delete?
+  </p>
+</mat-dialog-content>
+<mat-dialog-actions align="center">
+  <button mat-raised-button color="primary" [mat-dialog-close]="true" tabindex="1">Yes</button>
+  <button mat-raised-button mat-dialog-close (click)="onNoClick()" tabindex="-1">Cancel</button>
+</mat-dialog-actions>

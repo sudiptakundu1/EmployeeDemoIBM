@@ -1,0 +1,24 @@
+<h1 mat-dialog-title style="center">{{data.id==0? "Add "  :"Update"}} {{data.pageName}}</h1>
+<div mat-dialog-content>
+  <mat-form-field style="width:100%">
+    <mat-label>{{data.pageName}} Name</mat-label>
+    <input matInput [(ngModel)]="data.name" (change)="toggleSave()"  required>
+    <mat-error >Please provide {{data.pageName}} Name</mat-error>
+
+  </mat-form-field>
+  <mat-form-field style="width:100%" *ngIf="data.pageName=='Employee'">
+    <mat-label>{{data.pageName}} Department</mat-label>
+    <mat-select [(ngModel)]="data.deptId" name="department" (selectionChange)="toggleSave()" required>
+      <mat-option *ngFor="let dept of deptList" [value]="dept.deptId">
+        {{dept.deptName}}
+      </mat-option>
+    </mat-select>
+    <mat-error>Please select department</mat-error>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <div class="d-flex justify-content-end" style="width:100%">
+    <button mat-button (click)="onNoClick()" class="btn btn-primary">No Thanks</button>
+    <button mat-button (click)="onYesClick()" [disabled]="!this.allowSave" cdkFocusInitial class="btn btn-primary">Save</button>
+  </div>
+</div>
