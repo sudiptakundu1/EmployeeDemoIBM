@@ -3,10 +3,8 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "https://localhost:44398",
-      "launchUrl": "http://localhost:4200/",
-
-      "sslPort": 44398
+      "applicationUrl": "http://localhost:44398"
+      //"sslPort": 44398
     }
   },
   "profiles": {
@@ -20,9 +18,7 @@
     "EmployeeDemoIBM": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:5001;http://localhost:5000",
-      "launchUrl": "http://localhost:4200/",
-      //"launchUrl": "api/departments",
+      "applicationUrl": "http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

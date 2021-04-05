@@ -31,13 +31,11 @@ namespace EmployeeDemoIBM
                 configuration.RootPath = "ClientApp/dist";
             });
 
-            //conStr = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=ExpressDb;";
-
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
             //Adding Database and injecting DI for Repository object
             services.AddDbContext<DatabaseContext>
-                (option => option.UseSqlServer(Configuration.GetConnectionString("EmployeeDemoConnStrLocal")));
+                (option => option.UseSqlServer(Configuration.GetConnectionString("EmployeeDemoConnStrQA")));
             services.AddTransient<IRepository, Repository>();
 
             services.Configure<IISServerOptions>(options =>
@@ -66,15 +64,16 @@ namespace EmployeeDemoIBM
             }
 
             app.UseCors(options =>
-                           options.WithOrigins("http://localhost:4200")
-                           .AllowAnyMethod().AllowAnyHeader()
+                           options.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin()
                         );
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
             if (!env.IsDevelopment())
             {
                 app.UseSpaStaticFiles();
+                //app.UseDefaultFiles();
+                //app.UseStaticFiles();
             }
 
             app.UseRouting();

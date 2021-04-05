@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  DEPARTMENT_API: 'https://localhost:44398/api/departments',
-  EMPLOYEE_API:'https://localhost:44398/api/Employees'
+  DEPARTMENT_API: '/api/departments',
+  EMPLOYEE_API:'/api/Employees'
 };
 
 /*
