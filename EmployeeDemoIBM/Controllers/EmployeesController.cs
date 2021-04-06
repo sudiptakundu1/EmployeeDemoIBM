@@ -1,13 +1,10 @@
-﻿using EmployeeDemoIBMDb.EntityFramework;
-using EmployeeDemoIBMDb.EntityFramework.Models;
+﻿using EmployeeDemoIBMDb.EntityFramework.Models;
 using EmployeeDemoIBMDb.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace EmployeeDemoIBM.Controllers

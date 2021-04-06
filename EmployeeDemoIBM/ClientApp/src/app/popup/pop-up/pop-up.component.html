@@ -2,12 +2,12 @@
 <div mat-dialog-content>
   <mat-form-field style="width:100%">
     <mat-label>{{data.pageName}} Name</mat-label>
-    <input matInput [(ngModel)]="data.name" (change)="toggleSave()"  required>
+    <input matInput [(ngModel)]="data.name" (input)="toggleSave()"  required maxlength="99">
     <mat-error >Please provide {{data.pageName}} Name</mat-error>
   </mat-form-field>
   <mat-form-field style="width:100%" *ngIf="data.pageName=='Employee'">
     <mat-label>{{data.pageName}} Department</mat-label>
-    <mat-select [(ngModel)]="data.deptId" name="department" (selectionChange)="toggleSave()" required>
+    <mat-select [(ngModel)]="data.deptId" name="department" (selectionChange)="toggleSave()" required maxlength="99" >
       <mat-option *ngFor="let dept of deptList" [value]="dept.deptId">
         {{dept.deptName}}
       </mat-option>

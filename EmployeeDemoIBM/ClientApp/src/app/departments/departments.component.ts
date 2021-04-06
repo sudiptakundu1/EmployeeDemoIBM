@@ -14,11 +14,11 @@ import { DepartmentsService } from '../services/departments.service';
 })
 export class DepartmentsComponent implements OnInit {
   public departments: Departments[];
-  displayedColumns: string[] = ['DeptId', 'DeptName', 'Action'];
+  displayedColumns: string[] = ['deptId', 'deptName', 'Action'];
   dataSource = new MatTableDataSource<Departments>();
   isLoading: boolean = true;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  //@ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   ngOnInit() {
     this.getDepartments();
@@ -28,15 +28,19 @@ export class DepartmentsComponent implements OnInit {
 
   }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   getDepartments() {
     this.isLoading = true;
 
     this.departmentService.getDepartments().subscribe(response => {
       this.dataSource = new MatTableDataSource(response);
       this.dataSource.paginator = this.paginator;
-      //this.dataSource.sort = this.sort;
+       this.dataSource.sort = this.sort;
       this.isLoading = false;
-
     }), err => {
       this.toaster.error('There is some problem while loading data. Please check after some time.', 'Failure');
     }

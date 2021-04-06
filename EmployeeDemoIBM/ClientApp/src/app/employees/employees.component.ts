@@ -16,11 +16,11 @@ import { EmployeesService } from '../services/employees.service';
 export class EmployeesComponent {
   public employees: EmployeesFullView[];
   public departments: Departments[];
-  displayedColumns: string[] = ['Id', 'Name', 'DeptName', 'Action'];
+  displayedColumns: string[] = ['id', 'name', 'deptName', 'Action'];
   dataSource = new MatTableDataSource<EmployeesFullView>();
   isLoading: boolean = true;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  //@ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   ngOnInit() {
     this.getEmployees();
@@ -30,13 +30,24 @@ export class EmployeesComponent {
 
   }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   getEmployees() {
     this.isLoading = true;
     this.employeeService.getEmployees().subscribe(response => {
 
       this.dataSource = new MatTableDataSource(response);
       this.dataSource.paginator = this.paginator;
-      //this.dataSource.sort = this.sort;
+      this.dataSource.sort = this.sort;
+      this.dataSource.sortingDataAccessor = (item, property) => {
+        switch (property) {
+          case 'deptName': return item.dept.deptName;
+          default: return item.dept.deptName;
+        }
+      };
       this.isLoading = false;
 
     }), err => {
@@ -57,7 +68,7 @@ export class EmployeesComponent {
   createEmployees(employee) {
 
     this.employeeService.createEmployee(employee).subscribe(() => {
-      this.toaster.success('Employee "' + employee.name+ '" created successfully', 'Success');
+      this.toaster.success('Employee "' + employee.name + '" created successfully', 'Success');
       this.getEmployees();
     }
     ), err => {

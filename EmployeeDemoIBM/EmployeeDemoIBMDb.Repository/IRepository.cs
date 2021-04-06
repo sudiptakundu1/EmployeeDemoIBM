@@ -1,8 +1,5 @@
-﻿using EmployeeDemoIBMDb.EntityFramework;
-using EmployeeDemoIBMDb.EntityFramework.Models;
-using System;
+﻿using EmployeeDemoIBMDb.EntityFramework.Models;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace EmployeeDemoIBMDb.Repository

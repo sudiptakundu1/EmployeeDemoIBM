@@ -1,12 +1,7 @@
-﻿using EmployeeDemoIBMDb.EntityFramework;
-using EmployeeDemoIBMDb.EntityFramework.Models;
+﻿using EmployeeDemoIBMDb.EntityFramework.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace EmployeeDemoIBMDb.EntityFramework
 {

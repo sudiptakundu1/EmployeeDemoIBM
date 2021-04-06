@@ -23,6 +23,7 @@ export class PopUpComponent implements OnInit {
     this.dialogRef.close(false);
   }
   toggleSave() {
+    this.allowSave = false;
     if (this.data.name.trim() != '' && this.data.name != undefined) {
       this.data.name = this.data.name.trim();
       this.allowSave = true;
