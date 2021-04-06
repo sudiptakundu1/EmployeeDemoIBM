@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { ToastrService } from 'ngx-toastr';
 import { ConfirmationBoxComponent } from '../popup/confirmation-box/confirmation-box.component';
 import { PopUpComponent } from '../popup/pop-up/pop-up.component';
 import { DepartmentsService } from '../services/departments.service';
@@ -13,11 +14,9 @@ import { DepartmentsService } from '../services/departments.service';
 })
 export class DepartmentsComponent implements OnInit {
   public departments: Departments[];
-  displayedColumns: string[] = ['DeptId', 'DeptName','Action'];
+  displayedColumns: string[] = ['DeptId', 'DeptName', 'Action'];
   dataSource = new MatTableDataSource<Departments>();
-  errorMsg: string = '';
-  successMsg: string = '';
-  isLoading: boolean=true;
+  isLoading: boolean = true;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   //@ViewChild(MatSort, { static: true }) sort: MatSort;
 
@@ -25,79 +24,70 @@ export class DepartmentsComponent implements OnInit {
     this.getDepartments();
   }
 
-  constructor(private departmentService: DepartmentsService, public dialog: MatDialog) {
-      
+  constructor(private departmentService: DepartmentsService, public dialog: MatDialog, private toaster: ToastrService) {
+
   }
-  
+
   getDepartments() {
     this.isLoading = true;
 
     this.departmentService.getDepartments().subscribe(response => {
-
       this.dataSource = new MatTableDataSource(response);
       this.dataSource.paginator = this.paginator;
       //this.dataSource.sort = this.sort;
       this.isLoading = false;
 
     }), err => {
-      this.errorMsg = err;
+      this.toaster.error('There is some problem while loading data. Please check after some time.', 'Failure');
     }
   }
   editDepartments(department) {
 
     this.departmentService.updateDepartment(department).subscribe(() => {
-      this.successMsg = 'Department Updated Successfully' ;
-      this.getDepartments();
-    }
-    , err => {
-      this.errorMsg = 'Unable To Update Department. Please check after some time.';
-    })
-  }
-
-  createDepartments(department) {
-
-    this.departmentService.createDepartment(department).subscribe(() => {
-      this.successMsg = 'Department "' + department.deptName + '" Created Successfully';
+      this.toaster.success('Department updated successfully', 'Success');
       this.getDepartments();
     }
       , err => {
-        this.errorMsg = 'Unable To Create Department. Please check after some time.';
+        this.toaster.error('Unable To Update Department. Please check after some time.', 'Failure');
+      })
+  }
+
+  createDepartments(department) {
+    this.departmentService.createDepartment(department).subscribe(() => {
+      this.toaster.success('Department "' + department.deptName + '" is created successfully', 'Success');
+      this.getDepartments();
+    }
+      , err => {
+        this.toaster.error('Unable to create department. Please check after some time.', 'Failure');
       });
   }
 
   deleteDepartments(deptId) {
-
     this.departmentService.deleteDepartment(deptId).subscribe(() => {
-      this.successMsg = 'Deleted Successfully';
+      this.toaster.success('Deleted successfully', 'Success');
       this.getDepartments();
-
     }
       , err => {
-        console.log('hiiii', err.error);
         if (err.error.includes('REFERENCE constraint'))
-          this.errorMsg = 'Please delete employees associated with Department before deleting.'
+          this.toaster.warning('Please delete employees associated with this Department before deleting.', 'Warning');
         else
-        this.errorMsg = 'Unable To Delete Department. Please try after some time';
+          this.toaster.error('Unable to delete department. Please try after some time', 'Failure');
       });
   }
 
   openDialog(element, action): void {
-    this.resetMsg();
     var id = 0;
-    if(action=='Update'||action=='DELETE')
+    if (action == 'Update' || action == 'DELETE')
       id = element.deptId;
-
 
     const dialogRef = this.dialog.open(PopUpComponent, {
       width: '400px',
-      data: { id: id, name: element.deptName, pageName: 'Department'}
+      data: { id: id, name: element.deptName, pageName: 'Department' }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed', result);
       if (result != undefined && result != false) {
         let departmentObj: Departments = { deptId: result.id, deptName: result.name };
-        console.log('departmentObj', departmentObj);
         if (action == 'Update')
           this.editDepartments(departmentObj);
         else if (action == 'Add')
@@ -107,26 +97,17 @@ export class DepartmentsComponent implements OnInit {
   }
 
   openConfirmation(element, action) {
-    this.resetMsg();
     const dialogRef = this.dialog.open(ConfirmationBoxComponent, {
       width: '400px',
-      
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log('The dialog was closed', result);
         this.deleteDepartments(element);
       }
     });
   }
-  resetMsg() {
-    this.errorMsg = '';
-    this.successMsg = '';
-  }
 }
-
-
 
 export interface Departments {
   deptId: number;

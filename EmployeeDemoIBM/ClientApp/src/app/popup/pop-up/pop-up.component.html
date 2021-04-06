@@ -1,10 +1,9 @@
-<h1 mat-dialog-title style="center">{{data.id==0? "Add "  :"Update"}} {{data.pageName}}</h1>
+<h1 mat-dialog-title>{{data.id==0? "Add"  :"Update"}} {{data.pageName}}</h1>
 <div mat-dialog-content>
   <mat-form-field style="width:100%">
     <mat-label>{{data.pageName}} Name</mat-label>
     <input matInput [(ngModel)]="data.name" (change)="toggleSave()"  required>
     <mat-error >Please provide {{data.pageName}} Name</mat-error>
-
   </mat-form-field>
   <mat-form-field style="width:100%" *ngIf="data.pageName=='Employee'">
     <mat-label>{{data.pageName}} Department</mat-label>

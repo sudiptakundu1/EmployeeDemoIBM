@@ -11,8 +11,8 @@ import { DepartmentsService } from '../../services/departments.service';
 })
 export class PopUpComponent implements OnInit {
   name = new FormControl('', [Validators.required]);
-  allowSave:boolean= false;
-  deptList: Departments[]=[];
+  allowSave: boolean = false;
+  deptList: Departments[] = [];
   selectedDept = '';
   constructor(
     public dialogRef: MatDialogRef<PopUpComponent>,
@@ -28,32 +28,25 @@ export class PopUpComponent implements OnInit {
       this.allowSave = true;
       if (this.data.pageName == 'Employee' && (this.data.deptId == '' || this.data.deptId == undefined))
         this.allowSave = false;
-
     }
   }
   onYesClick(): void {
-    
     if (this.allowSave)
       this.dialogRef.close(this.data);
   }
   ngOnInit() {
     if (this.data.pageName == 'Employee') {
       this.getdepartmentDropdown();
-      this.selectedDept = this.data.deptId != undefined ? this.data.deptId:'';
-
+      this.selectedDept = this.data.deptId != undefined ? this.data.deptId : '';
     }
   }
 
   getdepartmentDropdown() {
-    
-      this.departmentService.getDepartments().subscribe(response => {
-
-        this.deptList = response;
-        console.log('  this.deptList', this.deptList)
-
-      }), err => {
-      }
+    this.departmentService.getDepartments().subscribe(response => {
+      this.deptList = response;
+    }), err => {
     }
   }
+}
 
 

@@ -23,6 +23,7 @@ import { PopUpComponent } from './popup/pop-up/pop-up.component';
 import { LoaderComponent } from './loader/loader.component';
 import { ConfirmationBoxComponent } from './popup/confirmation-box/confirmation-box.component';
 import { AboutComponent } from './about/about.component';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { AboutComponent } from './about/about.component';
     MatButtonModule,
     MatTooltipModule,
     MatSelectModule,
+    ToastrModule.forRoot(),
 
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },

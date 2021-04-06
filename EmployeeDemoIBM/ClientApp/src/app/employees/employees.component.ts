@@ -2,6 +2,7 @@ import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { ToastrService } from 'ngx-toastr';
 import { MatTableDataSource } from '@angular/material/table';
 import { ConfirmationBoxComponent } from '../popup/confirmation-box/confirmation-box.component';
 import { PopUpComponent } from '../popup/pop-up/pop-up.component';
@@ -15,10 +16,8 @@ import { EmployeesService } from '../services/employees.service';
 export class EmployeesComponent {
   public employees: EmployeesFullView[];
   public departments: Departments[];
-  displayedColumns: string[] = ['Id', 'Name', 'DeptName','Action'];
+  displayedColumns: string[] = ['Id', 'Name', 'DeptName', 'Action'];
   dataSource = new MatTableDataSource<EmployeesFullView>();
-  errorMsg: string = '';
-  successMsg: string = '';
   isLoading: boolean = true;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   //@ViewChild(MatSort, { static: true }) sort: MatSort;
@@ -27,17 +26,12 @@ export class EmployeesComponent {
     this.getEmployees();
   }
 
-  constructor(private employeeService: EmployeesService, public dialog: MatDialog) {
+  constructor(private employeeService: EmployeesService, public dialog: MatDialog, private toaster: ToastrService) {
 
   }
 
-  resetMsg() {
-    this.errorMsg = '';
-    this.successMsg = '';
-  }
   getEmployees() {
     this.isLoading = true;
-    this.resetMsg();
     this.employeeService.getEmployees().subscribe(response => {
 
       this.dataSource = new MatTableDataSource(response);
@@ -46,46 +40,44 @@ export class EmployeesComponent {
       this.isLoading = false;
 
     }), err => {
-      this.errorMsg = err;
+      this.toaster.error('There is some problem while loading data. Please check after some time.', 'Failure');
     }
   }
   editEmployees(employee) {
 
     this.employeeService.updateEmployee(employee).subscribe(() => {
-      this.successMsg = 'Updated Successfully';
+      this.toaster.success('Employee updated successfully', 'Success');
       this.getEmployees();
     }
     ), err => {
-      this.errorMsg = 'Unable To Update';
+      this.toaster.error('Unable to update employee. Please check after some time.', 'Failure');
     }
   }
 
   createEmployees(employee) {
 
     this.employeeService.createEmployee(employee).subscribe(() => {
-      this.successMsg = 'Employee "'+employee.deptName+'" Created Successfully';
+      this.toaster.success('Employee "' + employee.name+ '" created successfully', 'Success');
       this.getEmployees();
     }
     ), err => {
-      this.errorMsg = 'Unable To Create Employee. Please check after some time.';
+      this.toaster.error('Unable to create employee. Please check after some time.', 'Failure');
     }
   }
 
   deleteEmployees(deptId) {
 
     this.employeeService.deleteEmployee(deptId).subscribe(() => {
-      this.successMsg = 'Employee Deleted Successfully';
+      this.toaster.success('Deleted successfully', 'Success');
       this.getEmployees();
 
     }
     ), err => {
-      console.log('hiiii', err);
-      this.errorMsg = 'Unable To Delete Employee';
+      this.toaster.error('Unable To Delete Employee. Please check after some time.', 'Failure');
     }
   }
 
   openDialog(element, action): void {
-    this.resetMsg();
     var id = 0;
     var deptId = undefined;
     if (action == 'Update' || action == 'DELETE') {
@@ -100,11 +92,9 @@ export class EmployeesComponent {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed', result);
       if (result != undefined && result != false) {
 
         let employeeObj: Employees = { id: result.id, deptId: result.deptId, name: result.name };
-        console.log('employeeObj', employeeObj);
         if (action == 'Update')
           this.editEmployees(employeeObj);
         else if (action == 'Add')
@@ -114,18 +104,14 @@ export class EmployeesComponent {
   }
 
   openConfirmation(element, action) {
-    this.resetMsg();
     const dialogRef = this.dialog.open(ConfirmationBoxComponent, {
       width: '400px',
-
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log('The dialog was closed', result);
         this.deleteEmployees(element);
       }
-
     });
   }
 }
