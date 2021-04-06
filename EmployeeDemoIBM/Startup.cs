@@ -14,9 +14,13 @@ namespace EmployeeDemoIBM
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public string conStr;
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
+            conStr = (env.IsDevelopment()) ?
+                Configuration.GetConnectionString("EmployeeDemoConnStrLocal") :
+                Configuration.GetConnectionString("EmployeeDemoConnStrQA");
         }
 
         public IConfiguration Configuration { get; }
@@ -35,18 +39,8 @@ namespace EmployeeDemoIBM
 
             //Adding Database and injecting DI for Repository object
             services.AddDbContext<DatabaseContext>
-                (option => option.UseSqlServer(Configuration.GetConnectionString("EmployeeDemoConnStrQA")));
+                (option => option.UseSqlServer(conStr));
             services.AddTransient<IRepository, Repository>();
-
-            services.Configure<IISServerOptions>(options =>
-            {
-                options.AutomaticAuthentication = false;
-            });
-
-            services.Configure<IISOptions>(options =>
-            {
-                options.ForwardClientCertificate = false;
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,21 +53,16 @@ namespace EmployeeDemoIBM
             else
             {
                 app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
-            app.UseCors(options =>
-                           options.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin()
-                        );
+            app.UseCors(options => options.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin());
 
             //app.UseHttpsRedirection();
             app.UseStaticFiles();
             if (!env.IsDevelopment())
             {
                 app.UseSpaStaticFiles();
-                //app.UseDefaultFiles();
-                //app.UseStaticFiles();
             }
 
             app.UseRouting();
@@ -87,9 +76,6 @@ namespace EmployeeDemoIBM
 
             app.UseSpa(spa =>
             {
-                // To learn more about options for serving an Angular SPA from ASP.NET Core,
-                // see https://go.microsoft.com/fwlink/?linkid=864501
-
                 spa.Options.SourcePath = "ClientApp";
 
                 if (env.IsDevelopment())

@@ -7,8 +7,6 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
-import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { DepartmentsComponent } from './departments/departments.component';
 import { EmployeesComponent } from './employees/employees.component';
 import { MatCardModule } from '@angular/material/card';
@@ -24,21 +22,19 @@ import { MatDialogModule, MatSelectModule, MatTooltip, MatTooltipModule } from '
 import { PopUpComponent } from './popup/pop-up/pop-up.component';
 import { LoaderComponent } from './loader/loader.component';
 import { ConfirmationBoxComponent } from './popup/confirmation-box/confirmation-box.component';
-
+import { AboutComponent } from './about/about.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
-    FetchDataComponent,
     DepartmentsComponent,
     EmployeesComponent,
     PopUpComponent,
     LoaderComponent,
-    ConfirmationBoxComponent
-
+    ConfirmationBoxComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -61,10 +57,9 @@ import { ConfirmationBoxComponent } from './popup/confirmation-box/confirmation-
 
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
       { path: 'department', component: DepartmentsComponent },
       { path: 'employee', component: EmployeesComponent },
+      { path: 'about', component: AboutComponent },
     ])
   ],
   entryComponents: [
